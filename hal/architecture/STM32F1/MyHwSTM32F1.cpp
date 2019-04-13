@@ -18,6 +18,7 @@
  */
 
 #include "MyHwSTM32F1.h"
+#include "drivers/STM32LowPower/src/STM32LowPower.h"
 
 /*
 * Pinout STM32F103C8 dev board:
@@ -47,6 +48,8 @@ bool hwInit(void)
 #if !defined(MY_DISABLED_SERIAL)
 	MY_SERIALDEVICE.begin(MY_BAUD_RATE);
 #endif
+	LowPower.begin();
+#if 0
 	if (EEPROM.init() == EEPROM_OK) {
 		uint16 cnt;
 		EEPROM.count(&cnt);
@@ -57,24 +60,31 @@ bool hwInit(void)
 		return true;
 	}
 	return false;
+#endif
+	return true;
 }
 
 void hwReadConfigBlock(void* buf, void* addr, size_t length)
 {
+	memset(buf, 0xff, length);
+#if 0
 	uint8_t* dst = static_cast<uint8_t*>(buf);
 	int pos = reinterpret_cast<int>(addr);
 	while (length-- > 0) {
 		*dst++ = EEPROM.read(pos++);
 	}
+#endif
 }
 
 void hwWriteConfigBlock(void* buf, void* addr, size_t length)
 {
+#if 0
 	uint8_t* src = static_cast<uint8_t*>(buf);
 	int pos = reinterpret_cast<int>(addr);
 	while (length-- > 0) {
 		EEPROM.write(pos++, *src++);
 	}
+#endif
 }
 
 uint8_t hwReadConfig(const int addr)
@@ -91,9 +101,13 @@ void hwWriteConfig(const int addr, uint8_t value)
 
 int8_t hwSleep(uint32_t ms)
 {
-	// TODO: Not supported!
-	(void)ms;
-	return MY_SLEEP_NOT_POSSIBLE;
+	if (ms >= 1000) {
+		LowPower.deepSleep(ms);
+		return MY_WAKE_UP_BY_TIMER;
+	}
+	else {
+		return MY_SLEEP_NOT_POSSIBLE;
+	}
 }
 
 int8_t hwSleep(uint8_t interrupt, uint8_t mode, uint32_t ms)
@@ -120,6 +134,7 @@ int8_t hwSleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mo
 
 void hwRandomNumberInit(void)
 {
+#if 0
 	// use internal temperature sensor as noise source
 	adc_reg_map *regs = ADC1->regs;
 	regs->CR2 |= ADC_CR2_TSVREFE;
@@ -141,6 +156,7 @@ void hwRandomNumberInit(void)
 		seed ^= ( (newValue + hwMillis()) & 7) << i;
 	}
 	randomSeed(seed);
+#endif
 }
 
 bool hwUniqueID(unique_id_t* uniqueID)
@@ -151,10 +167,12 @@ bool hwUniqueID(unique_id_t* uniqueID)
 
 uint16_t hwCPUVoltage()
 {
+#if 0
 	adc_reg_map *regs = ADC1->regs;
 	regs->CR2 |= ADC_CR2_TSVREFE;    // enable VREFINT and temp sensor
 	regs->SMPR1 =  ADC_SMPR1_SMP17;  // sample rate for VREFINT ADC channel
 	return 1200 * 4096 / adc_read(ADC1, 17);
+#endif
 }
 
 uint16_t hwCPUFrequency()

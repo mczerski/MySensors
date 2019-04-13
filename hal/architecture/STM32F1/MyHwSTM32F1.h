@@ -20,9 +20,9 @@
 #ifndef MyHwSTM32F1_h
 #define MyHwSTM32F1_h
 
-#include <libmaple/iwdg.h>
+//#include <libmaple/iwdg.h>
 #include <itoa.h>
-#include <EEPROM.h>
+//#include <EEPROM.h>
 #ifdef __cplusplus
 #include <Arduino.h>
 #endif
@@ -53,8 +53,8 @@
 #define hwDigitalWrite(__pin, __value) digitalWrite(__pin, __value)
 #define hwDigitalRead(__pin) digitalRead(__pin)
 #define hwPinMode(__pin, __value) pinMode(__pin, __value)
-#define hwWatchdogReset() iwdg_feed()
-#define hwReboot() nvic_sys_reset()
+#define hwWatchdogReset() {} //iwdg_feed()
+#define hwReboot() {} //nvic_sys_reset()
 #define hwMillis() millis()
 
 extern void serialEventRun(void) __attribute__((weak));

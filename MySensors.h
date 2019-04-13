@@ -67,7 +67,10 @@
 #elif defined(ARDUINO_ARCH_SAMD)
 #include "drivers/extEEPROM/extEEPROM.cpp"
 #include "hal/architecture/SAMD/MyHwSAMD.cpp"
-#elif defined(ARDUINO_ARCH_STM32F1)
+#elif defined(ARDUINO_ARCH_STM32)
+#define ARDUINO_ARCH_STM32F1
+#include "drivers/STM32RTC/src/STM32RTC.cpp"
+#include "drivers/STM32LowPower/src/STM32LowPower.cpp"
 #include "hal/architecture/STM32F1/MyHwSTM32F1.cpp"
 #elif defined(ARDUINO_ARCH_NRF5) || defined(ARDUINO_ARCH_NRF52)
 #include "drivers/NVM/VirtualPage.cpp"

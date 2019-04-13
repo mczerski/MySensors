@@ -19,6 +19,7 @@
 
 // Force init to be called *first*, i.e. before static object allocation.
 // Otherwise, statically allocated objects that need libmaple may fail.
+#if 0
 __attribute__(( constructor (101))) void premain()
 {
 	init();
@@ -39,3 +40,29 @@ int main(void)
 	}
 	return 0;
 }
+#endif
+
+/*
+ * \brief Main entry point of Arduino application
+ */
+int main(void)
+{
+  void initVariant();
+  initVariant();
+
+  _begin();
+
+  for (;;) {
+#if defined(CORE_CALLBACK)
+    CoreCallback();
+#endif
+    _process();
+    loop();
+    if (serialEventRun) {
+      serialEventRun();
+    }
+  }
+
+  return 0;
+}
+
