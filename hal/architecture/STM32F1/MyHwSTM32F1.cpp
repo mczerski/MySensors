@@ -43,6 +43,7 @@
 * IRQ	NA
 *
 */
+DummySerial DummySerial1;
 bool hwInit(void)
 {
 #if !defined(MY_DISABLED_SERIAL)
@@ -106,7 +107,8 @@ int8_t hwSleep(uint32_t ms)
 		return MY_WAKE_UP_BY_TIMER;
 	}
 	else {
-		return MY_SLEEP_NOT_POSSIBLE;
+		LowPower.sleep(ms);
+		return MY_WAKE_UP_BY_TIMER;
 	}
 }
 

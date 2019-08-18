@@ -39,12 +39,58 @@
 #define printf_P printf
 #define yield()				  // not defined
 
+class DummySerial: public Print
+{
+    public:
+	    void begin(unsigned long baud) {}
+    virtual size_t write(uint8_t) {return 1;}
+    virtual size_t write(const uint8_t *buffer, size_t size) {return size;}
+};
+extern DummySerial DummySerial1;
 #ifndef MY_SERIALDEVICE
+//#define MY_SERIALDEVICE DummySerial1
 #define MY_SERIALDEVICE Serial
 #endif
 
 #define MIN(a,b) min(a,b)
 #define MAX(a,b) max(a,b)
+
+#undef PRId8
+#undef PRIi8
+#undef PRIo8
+#undef PRIu8
+#undef PRIx8
+#undef PRIX8
+#undef PRIdLEAST8
+#undef PRIiLEAST8
+#undef PRIoLEAST8
+#undef PRIuLEAST8
+#undef PRIxLEAST8
+#undef PRIXLEAST8
+#undef PRIdFAST8
+#undef PRIiFAST8
+#undef PRIoFAST8
+#undef PRIuFAST8
+#undef PRIxFAST8
+#undef PRIXFAST8
+#define PRId8           "d"
+#define PRIi8           "i"
+#define PRIo8           "o"
+#define PRIu8           "u"
+#define PRIx8           "x"
+#define PRIX8           "X"
+#define PRIdLEAST8      "d"
+#define PRIiLEAST8      "i"
+#define PRIoLEAST8      "o"
+#define PRIuLEAST8      "u"
+#define PRIxLEAST8      "x"
+#define PRIXLEAST8      "X"
+#define PRIdFAST8       "d"
+#define PRIiFAST8       "i"
+#define PRIoFAST8       "o"
+#define PRIuFAST8       "u"
+#define PRIxFAST8       "x"
+#define PRIXFAST8       "X"
 
 #ifndef digitalPinToInterrupt
 #define digitalPinToInterrupt(__pin) (__pin)
